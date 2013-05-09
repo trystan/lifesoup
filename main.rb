@@ -45,26 +45,33 @@ class Game
   def update
     @circles.each do |circle|
       circle.update
-      if circle.position[0] - circle.radius < 0
-        circle.bounce :west
-      end
+      bounds circle
+      collide circle
+    end
+  end
 
-      if circle.position[0] + circle.radius > 500
-        circle.bounce :east
-      end
+  def bounds circle
+    if circle.position[0] - circle.radius < 0
+      circle.bounce :west
+    end
 
-      if circle.position[1] - circle.radius < 0
-        circle.bounce :north
-      end
+    if circle.position[0] + circle.radius > 500
+      circle.bounce :east
+    end
 
-      if circle.position[1] + circle.radius > 500
-        circle.bounce :south
-      end
+    if circle.position[1] - circle.radius < 0
+      circle.bounce :north
+    end
 
-      @circles.each do |other|
-        if circle != other && circle.intersects?(other)
-          circle.collide other
-        end
+    if circle.position[1] + circle.radius > 500
+      circle.bounce :south
+    end
+  end
+
+  def collide circle
+    @circles.each do |other|
+      if circle != other && circle.intersects?(other)
+        circle.collide other
       end
     end
   end
