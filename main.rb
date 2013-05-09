@@ -1,20 +1,28 @@
 
 require 'rubygame'
 
-screen = Rubygame::Screen.new [500, 500]
-screen.fill [0, 0, 16]
-screen.update
+class Game
+  def initialize
+    @screen = Rubygame::Screen.new [500, 500]
+    @screen.fill [0, 0, 16]
+    @screen.update
 
-queue = Rubygame::EventQueue.new
+    @queue = Rubygame::EventQueue.new
+  end
 
-running = true
-while running do
-  queue.each do |event|
-    case event
-      when Rubygame::QuitEvent
-        running = false
+  def run!
+    running = true
+    while running do
+      @queue.each do |event|
+        case event
+          when Rubygame::QuitEvent
+            running = false
+        end
+      end
     end
+    Rubygame.quit
   end
 end
 
-Rubygame.quit
+Game.new.run!
+
