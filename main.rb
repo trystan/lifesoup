@@ -18,6 +18,7 @@ class Game
   def run!
     @running = true
     while @running do
+      update
       draw
       events
     end
@@ -34,10 +35,17 @@ class Game
   end
 
   def draw
+    @screen.fill [0, 0, 16]
     @circles.each do |circle|
       @screen.draw_circle circle.position, circle.radius, circle.color
     end
     @screen.update
+  end
+
+  def update
+    @circles.each do |circle|
+      circle.update
+    end
   end
 end
 
