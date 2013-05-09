@@ -14,7 +14,7 @@ class Game
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
     @clock.target_framerate = 30
-    
+
     @world = World.new WIDTH, HEIGHT
   end
 
