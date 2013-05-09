@@ -37,7 +37,7 @@ class Game
   def draw
     @screen.fill [0, 0, 16]
     @circles.each do |circle|
-      @screen.draw_circle circle.position, circle.radius, circle.color
+      @screen.draw_circle_a circle.position, circle.radius, circle.color
     end
     @screen.update
   end
