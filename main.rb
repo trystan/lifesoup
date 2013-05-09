@@ -1,5 +1,6 @@
 
 require 'rubygame'
+require_relative 'world.rb'
 require_relative 'circle.rb'
 
 WIDTH = 500
@@ -11,17 +12,13 @@ class Game
     @screen.fill [0, 0, 16]
 
     @queue = Rubygame::EventQueue.new
-
-    @circles = []
-    while @circles.length < 100
-      @circles << Circle.new(WIDTH, HEIGHT)
-    end
+    @world = World.new WIDTH, HEIGHT
   end
 
   def run!
     @running = true
     while @running do
-      update
+      @world.update
       draw
       events
     end
@@ -39,46 +36,11 @@ class Game
 
   def draw
     @screen.fill [0, 0, 16]
-    @circles.each do |circle|
+    @world.circles.each do |circle|
       @screen.draw_circle_a circle.position, circle.radius, circle.color
     end
     @screen.update
   end
-
-  def update
-    @circles.each do |circle|
-      circle.update
-      bounds circle
-      collide circle
-    end
-  end
-
-  def bounds circle
-    if circle.position[0] - circle.radius < 0
-      circle.bounce :west
-    end
-
-    if circle.position[0] + circle.radius > WIDTH
-      circle.bounce :east
-    end
-
-    if circle.position[1] - circle.radius < 0
-      circle.bounce :north
-    end
-
-    if circle.position[1] + circle.radius > HEIGHT
-      circle.bounce :south
-    end
-  end
-
-  def collide circle
-    @circles.each do |other|
-      if circle != other && circle.intersects?(other)
-        circle.collide other
-      end
-    end
-  end
 end
 
 Game.new.run!
-
