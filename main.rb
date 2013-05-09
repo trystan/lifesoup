@@ -11,16 +11,20 @@ class Game
   end
 
   def run!
-    running = true
-    while running do
-      @queue.each do |event|
-        case event
-          when Rubygame::QuitEvent
-            running = false
-        end
+    @running = true
+    while @running do
+      events
+    end
+  end
+
+  def events
+    @queue.each do |event|
+      case event
+        when Rubygame::QuitEvent
+          Rubygame.quit
+          @running = false
       end
     end
-    Rubygame.quit
   end
 end
 
