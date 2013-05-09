@@ -30,13 +30,13 @@ class World
   def bounds circle
     if circle.position[0] - circle.radius < 0
       circle.bounce :west
-    elsif circle.position[0] + circle.radius > WIDTH
+    elsif circle.position[0] + circle.radius > @width
       circle.bounce :east
     end
 
     if circle.position[1] - circle.radius < 0
       circle.bounce :north
-    elsif circle.position[1] + circle.radius > HEIGHT
+    elsif circle.position[1] + circle.radius > @height
       circle.bounce :south
     end
   end
