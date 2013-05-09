@@ -1,5 +1,6 @@
 
 require 'rubygame'
+require_relative 'circle.rb'
 
 class Game
   def initialize
@@ -10,7 +11,7 @@ class Game
 
     @circles = []
     while @circles.length < 100
-      @circles << { :position => [rand(500), rand(500)], :color => [rand(128) + 64, rand(128) + 64, rand(128) + 64] }
+      @circles << Circle.new
     end
   end
 
@@ -34,7 +35,7 @@ class Game
 
   def draw
     @circles.each do |circle|
-      @screen.draw_circle circle[:position], 4, circle[:color]
+      @screen.draw_circle circle.position, circle.radius, circle.color
     end
     @screen.update
   end
