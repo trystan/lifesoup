@@ -4,12 +4,13 @@ class Circle
 
   def initialize
     @position = [rand(500), rand(500)]
+    @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
     @color = [rand(128) + 64, rand(128) + 64, rand(128) + 64]
     @radius = 5
   end
 
   def update
-    @position[0] += rand(5) - 2
-    @position[1] += rand(5) - 2
+    @position[0] += @velocity[0]
+    @position[1] += @velocity[1]
   end
 end
