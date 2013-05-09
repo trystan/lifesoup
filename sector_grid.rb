@@ -15,9 +15,7 @@ class SectorGrid
       next if !col
       sector = col[y + offset[1]]
       next if !sector
-      sector.each do |other|
-        near << other
-      end
+      near += sector
     end
     near
   end
