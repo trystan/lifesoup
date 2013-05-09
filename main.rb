@@ -8,10 +8,13 @@ HEIGHT = 500
 
 class Game
   def initialize
-    @screen = Rubygame::Screen.new [WIDTH, HEIGHT]
-    @screen.fill [0, 0, 16]
+    @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
+    @screen.title = 'life soup'
 
     @queue = Rubygame::EventQueue.new
+    @clock = Rubygame::Clock.new
+    @clock.target_framerate = 30
+    
     @world = World.new WIDTH, HEIGHT
   end
 
@@ -21,6 +24,7 @@ class Game
       @world.update
       draw
       events
+      @clock.tick
     end
   end
 
@@ -39,7 +43,7 @@ class Game
     @world.circles.each do |circle|
       @screen.draw_circle_a circle.position, circle.radius, circle.color
     end
-    @screen.update
+    @screen.flip
   end
 end
 
