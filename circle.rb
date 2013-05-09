@@ -2,8 +2,8 @@
 class Circle
   attr_reader :position, :color, :radius
 
-  def initialize
-    @position = [rand(50 * 10), rand(50) * 10]
+  def initialize width, height
+    @position = [rand(width / 10) * 10, rand(height / 10) * 10]
     @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
     @color = [rand(128) + 64, rand(128) + 64, rand(128) + 64]
     @radius = 5

@@ -2,16 +2,19 @@
 require 'rubygame'
 require_relative 'circle.rb'
 
+WIDTH = 500
+HEIGHT = 500
+
 class Game
   def initialize
-    @screen = Rubygame::Screen.new [500, 500]
+    @screen = Rubygame::Screen.new [WIDTH, HEIGHT]
     @screen.fill [0, 0, 16]
 
     @queue = Rubygame::EventQueue.new
 
     @circles = []
     while @circles.length < 100
-      @circles << Circle.new
+      @circles << Circle.new(WIDTH, HEIGHT)
     end
   end
 
@@ -55,7 +58,7 @@ class Game
       circle.bounce :west
     end
 
-    if circle.position[0] + circle.radius > 500
+    if circle.position[0] + circle.radius > WIDTH
       circle.bounce :east
     end
 
@@ -63,7 +66,7 @@ class Game
       circle.bounce :north
     end
 
-    if circle.position[1] + circle.radius > 500
+    if circle.position[1] + circle.radius > HEIGHT
       circle.bounce :south
     end
   end
