@@ -3,7 +3,7 @@ class Circle
   attr_reader :position, :color, :radius
 
   def initialize
-    @position = [rand(500), rand(500)]
+    @position = [rand(50 * 10), rand(50) * 10]
     @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
     @color = [rand(128) + 64, rand(128) + 64, rand(128) + 64]
     @radius = 5
@@ -29,5 +29,28 @@ class Circle
     when :south
       @velocity[1] *= -1 if @velocity[1] > 0
     end
+  end
+
+  def intersects? other
+    dx = position[0]-other.position[0]
+    dy = position[1]-other.position[1]
+    r2 = radius + other.radius
+
+    dx * dx + dy * dy <= r2 * r2
+  end
+
+  def collide other
+    collide_once other
+    other.collide_once self
+  end
+
+  def collide_once other
+    # not realistic, but effective
+    speed = Math::sqrt(@velocity[1] * @velocity[1] + @velocity[0] * @velocity[0])
+
+    angle = Math::atan2(@position[1] - other.position[1], @position[0] - other.position[0])
+
+    @velocity[0] = (@velocity[0] + speed * Math::cos(angle)) / 2
+    @velocity[1] = (@velocity[1] + speed * Math::sin(angle)) / 2
   end
 end

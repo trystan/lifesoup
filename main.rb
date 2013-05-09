@@ -60,6 +60,12 @@ class Game
       if circle.position[1] + circle.radius > 500
         circle.bounce :south
       end
+
+      @circles.each do |other|
+        if circle != other && circle.intersects?(other)
+          circle.collide other
+        end
+      end
     end
   end
 end
