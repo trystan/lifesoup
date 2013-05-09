@@ -3,8 +3,8 @@ require 'rubygame'
 require_relative 'world.rb'
 require_relative 'circle.rb'
 
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 600
+HEIGHT = 600
 
 class Game
   def initialize

@@ -6,8 +6,8 @@ class Circle
     @position = [rand(width / 10) * 10, rand(height / 10) * 10]
     @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
     @color = [rand(128) + 64, rand(128) + 64, rand(128) + 64]
-    @radius = 5
-    @max_speed = 2.0
+    @radius = 4
+    @max_speed = 1.0
   end
 
   def update
