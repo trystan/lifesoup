@@ -7,6 +7,11 @@ class Game
     @screen.fill [0, 0, 16]
 
     @queue = Rubygame::EventQueue.new
+
+    @circles = []
+    while @circles.length < 100
+      @circles << { :position => [rand(500), rand(500)], :color => [rand(128) + 64, rand(128) + 64, rand(128) + 64] }
+    end
   end
 
   def run!
@@ -28,7 +33,9 @@ class Game
   end
 
   def draw
-    @screen.draw_circle [rand(500), rand(500)], 4, [rand(128) + 64, rand(128) + 64, rand(128) + 64]
+    @circles.each do |circle|
+      @screen.draw_circle circle[:position], 4, circle[:color]
+    end
     @screen.update
   end
 end
