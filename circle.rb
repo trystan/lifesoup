@@ -40,17 +40,12 @@ class Circle
   end
 
   def collide other
-    collide_once other
-    other.collide_once self
-  end
-
-  def collide_once other
     # not realistic, but effective
     speed = Math::sqrt(@velocity[1] * @velocity[1] + @velocity[0] * @velocity[0])
 
     angle = Math::atan2(@position[1] - other.position[1], @position[0] - other.position[0])
 
-    @velocity[0] = (@velocity[0] + speed * Math::cos(angle)) / 2
-    @velocity[1] = (@velocity[1] + speed * Math::sin(angle)) / 2
+    @velocity[0] = (@velocity[0] + speed * Math::cos(angle) * 2) / 3
+    @velocity[1] = (@velocity[1] + speed * Math::sin(angle) * 2) / 3
   end
 end
