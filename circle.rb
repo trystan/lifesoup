@@ -32,6 +32,8 @@ class Circle
   end
 
   def intersects? other
+    return false if other == self
+
     dx = position[0]-other.position[0]
     dy = position[1]-other.position[1]
     r2 = radius + other.radius
@@ -39,7 +41,7 @@ class Circle
     dx * dx + dy * dy <= r2 * r2
   end
 
-  def collide other
+  def collide_with other
     # not realistic, but effective
     speed = Math::sqrt(@velocity[1] * @velocity[1] + @velocity[0] * @velocity[0])
 

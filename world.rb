@@ -7,7 +7,7 @@ class World
     @height = height
 
     @circles = []
-    while @circles.length < 100
+    100.times do
       @circles << Circle.new(@width, @height)
     end
   end
@@ -23,26 +23,20 @@ class World
   def bounds circle
     if circle.position[0] - circle.radius < 0
       circle.bounce :west
-    end
-
-    if circle.position[0] + circle.radius > WIDTH
+    elsif circle.position[0] + circle.radius > WIDTH
       circle.bounce :east
     end
 
     if circle.position[1] - circle.radius < 0
       circle.bounce :north
-    end
-
-    if circle.position[1] + circle.radius > HEIGHT
+    elsif circle.position[1] + circle.radius > HEIGHT
       circle.bounce :south
     end
   end
 
   def collide circle
     @circles.each do |other|
-      if circle != other && circle.intersects?(other)
-        circle.collide other
-      end
+      circle.collide_with other if circle.intersects?(other)
     end
   end
 end
