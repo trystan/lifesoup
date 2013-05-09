@@ -5,7 +5,6 @@ class Game
   def initialize
     @screen = Rubygame::Screen.new [500, 500]
     @screen.fill [0, 0, 16]
-    @screen.update
 
     @queue = Rubygame::EventQueue.new
   end
@@ -13,6 +12,7 @@ class Game
   def run!
     @running = true
     while @running do
+      draw
       events
     end
   end
@@ -25,6 +25,11 @@ class Game
           @running = false
       end
     end
+  end
+
+  def draw
+    @screen.draw_circle [rand(500), rand(500)], 4, [rand(128) + 64, rand(128) + 64, rand(128) + 64]
+    @screen.update
   end
 end
 
