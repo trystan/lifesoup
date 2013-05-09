@@ -45,6 +45,21 @@ class Game
   def update
     @circles.each do |circle|
       circle.update
+      if circle.position[0] - circle.radius < 0
+        circle.bounce :west
+      end
+
+      if circle.position[0] + circle.radius > 500
+        circle.bounce :east
+      end
+
+      if circle.position[1] - circle.radius < 0
+        circle.bounce :north
+      end
+
+      if circle.position[1] + circle.radius > 500
+        circle.bounce :south
+      end
     end
   end
 end

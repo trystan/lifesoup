@@ -17,4 +17,17 @@ class Circle
     @position[0] += @velocity[0]
     @position[1] += @velocity[1]
   end
+
+  def bounce direction
+    case direction
+    when :west
+      @velocity[0] *= -1 if @velocity[0] < 0
+    when :east
+      @velocity[0] *= -1 if @velocity[0] > 0
+    when :north
+      @velocity[1] *= -1 if @velocity[1] < 0
+    when :south
+      @velocity[1] *= -1 if @velocity[1] > 0
+    end
+  end
 end
