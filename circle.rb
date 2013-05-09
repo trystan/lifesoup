@@ -11,8 +11,10 @@ class Circle
   end
 
   def update
-    @velocity[0] = [[-@max_speed, @velocity[0] + (rand(3.0) - 1.0) / 10.0].max, @max_speed].min
-    @velocity[1] = [[-@max_speed, @velocity[1] + (rand(3.0) - 1.0) / 10.0].max, @max_speed].min
+    if rand(10) == 1
+      @velocity[0] = [[-@max_speed, @velocity[0] + (rand(3.0) - 1.0) / 5.0].max, @max_speed].min
+      @velocity[1] = [[-@max_speed, @velocity[1] + (rand(3.0) - 1.0) / 5.0].max, @max_speed].min
+    end
 
     @position[0] += @velocity[0]
     @position[1] += @velocity[1]
