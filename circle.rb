@@ -2,12 +2,26 @@
 class Circle
   attr_reader :position, :color, :radius
 
+  def alive?
+    @alive
+  end
+
   def initialize width, height
     @position = [rand(width / 10) * 10, rand(height / 10) * 10]
     @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
-    @color = [rand(128) + 64, rand(128) + 64, rand(128) + 64]
     @radius = 4
     @max_speed = 1.0
+    @rps = [:rock, :paper, :scisors].sample
+    @alive = true
+    
+    case @rps
+    when :rock
+      @color = [192, 32, 32]
+    when :paper
+      @color = [32, 192, 32]
+    when :scisors
+      @color = [32, 32, 192]
+    end
   end
 
   def update
@@ -44,6 +58,19 @@ class Circle
   end
 
   def collide_with other
+    attack other
+    bounce_off_of other
+  end
+
+  def attack other
+    @alive = false if other.beats? @rps
+  end
+
+  def beats? other_rps
+    @rps == :rock && other_rps == :scisors || @rps == :scisors && other_rps == :paper || @rps == :paper && other_rps == :rock
+  end
+
+  def bounce_off_of other
     # not realistic, but effective
     speed = Math::sqrt(@velocity[1] * @velocity[1] + @velocity[0] * @velocity[0])
 

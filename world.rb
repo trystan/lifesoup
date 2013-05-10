@@ -25,6 +25,7 @@ class World
       collide circle
       @sectors.resector circle
     end
+    @circles = @circles.select { |c| c.alive? }
   end
 
   def bounds circle
