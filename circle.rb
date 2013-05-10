@@ -1,18 +1,25 @@
 
 class Circle
-  attr_reader :position, :color, :radius
+  attr_reader :position, :color, :radius, :velocity, :rps
 
   def alive?
     @health > 0
   end
 
-  def initialize width, height
-    @position = [rand(width / 10) * 10, rand(height / 10) * 10]
-    @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
+  def initialize width, height, parent = nil
+    if parent
+      @position = [parent.position[0] + (rand(11) - 5), parent.position[1] + (rand(11) - 5)]
+      @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
+      @rps = parent.rps
+      @health = 5
+    else
+      @position = [rand(width / 10) * 10, rand(height / 10) * 10]
+      @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
+      @rps = [:rock, :paper, :scisors].sample
+      @health = 10
+    end
     @radius = 4
     @max_speed = 1.0
-    @rps = [:rock, :paper, :scisors].sample
-    @health = 10
 
     case @rps
     when :rock
@@ -24,7 +31,7 @@ class Circle
     end
   end
 
-  def update
+  def update world
     if rand(10) == 1
       @velocity[0] = [[-@max_speed, @velocity[0] + (rand(3.0) - 1.0) / 5.0].max, @max_speed].min
       @velocity[1] = [[-@max_speed, @velocity[1] + (rand(3.0) - 1.0) / 5.0].max, @max_speed].min
@@ -32,6 +39,11 @@ class Circle
 
     @position[0] += @velocity[0]
     @position[1] += @velocity[1]
+
+    if @health > 10
+      world.add_circle(Circle.new 100, 100, self)
+      @health -= 3
+    end
   end
 
   def bounce direction

@@ -13,10 +13,13 @@ class World
 
     @circles = []
     500.times do
-      c = Circle.new(@width, @height)
-      @circles << c
-      @sectors.resector c
+      add_circle Circle.new(@width, @height)
     end
+  end
+
+  def add_circle circle
+    @circles << circle
+    @sectors.resector circle
   end
 
   def update
@@ -25,7 +28,7 @@ class World
     end
     @circles.each do |circle|
       @sectors.unsector circle
-      circle.update
+      circle.update self
       bounds circle
       collide circle
       @sectors.resector circle
