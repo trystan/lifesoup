@@ -40,6 +40,9 @@ class Game
 
   def draw
     @screen.fill [0, 0, 16]
+    @world.foods.each do |food|
+      @screen.draw_circle_a food, 2, [32, 200, 32]
+    end
     @world.circles.each do |circle|
       @screen.draw_circle_a circle.position, circle.radius, circle.color
     end

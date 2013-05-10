@@ -3,7 +3,7 @@ class Circle
   attr_reader :position, :color, :radius
 
   def alive?
-    @alive
+    @health > 0
   end
 
   def initialize width, height
@@ -12,15 +12,15 @@ class Circle
     @radius = 4
     @max_speed = 1.0
     @rps = [:rock, :paper, :scisors].sample
-    @alive = true
-    
+    @health = 10
+
     case @rps
     when :rock
-      @color = [192, 32, 32]
+      @color = [128, 64, 64]
     when :paper
-      @color = [32, 192, 32]
+      @color = [64, 128, 64]
     when :scisors
-      @color = [32, 32, 192]
+      @color = [64, 64, 128]
     end
   end
 
@@ -47,6 +47,14 @@ class Circle
     end
   end
 
+  def intersects_food? food
+    dx = position[0]-food[0]
+    dy = position[1]-food[1]
+    r2 = radius + 2
+
+    dx * dx + dy * dy <= r2 * r2
+  end
+
   def intersects? other
     return false if other == self
 
@@ -57,13 +65,17 @@ class Circle
     dx * dx + dy * dy <= r2 * r2
   end
 
+  def eat food
+    @health += 1
+  end
+
   def collide_with other
     attack other
     bounce_off_of other
   end
 
   def attack other
-    @alive = false if other.beats? @rps
+    @health -= 1 if other.beats? @rps
   end
 
   def beats? other_rps
