@@ -1,6 +1,6 @@
 
 class Circle
-  attr_reader :position, :color, :radius, :velocity, :attack, :defense, :age
+  attr_reader :position, :color, :velocity, :attack, :defense, :age
   attr_accessor :health, :parts
 
   def alive?
@@ -29,11 +29,15 @@ class Circle
         @parts << [:red, :yellow, :green, :blue].sample
       end
     end
-    @radius = 12
+    @radius = 8
     @max_speed = 1.0
     @age = 1
 
     calculate_attributes
+  end
+
+  def radius
+    [@radius, @age / 5].min
   end
 
   def calculate_attributes
@@ -103,7 +107,7 @@ class Circle
   end
 
   def attack_circle other
-    amount = [attack - other.defense, 0.1].max / 5.0
+    amount = [rand(attack) - rand(other.defense), 0.1].max / 5.0
     @health += amount
     other.health -= amount * 1.1
   end
