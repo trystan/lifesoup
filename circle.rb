@@ -1,6 +1,6 @@
 
 class Circle
-  attr_reader :position, :color, :velocity, :attack, :defense, :age
+  attr_reader :position, :color, :velocity, :attack_value, :defense_value, :age
   attr_accessor :health, :parts
 
   def alive?
@@ -18,7 +18,7 @@ class Circle
     if parent
       @position = [parent.position[0] + (rand(31) - 15), parent.position[1] + (rand(31) - 15)]
       @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
-      @health = 5.0
+      @health = 4.0
       @parts = parent.parts.clone
       mutate
     else
@@ -46,21 +46,21 @@ class Circle
   end
 
   def calculate_attributes
-    @attack = 0
-    @defense = 0
-    @plant = 0
-    @birth = 0
+    @attack_value = 0
+    @defense_value = 0
+    @plant_value = 0
+    @birth_value = 0
 
     @parts.each do |part|
       case part
       when :red
-        @attack += 1
+        @attack_value += 1
       when :yellow
-        @defense += 1
+        @defense_value += 1
       when :green
-        @plant += 1
+        @plant_value += 1
       when :blue
-        @birth += 1
+        @birth_value += 1
       end
     end
   end
@@ -79,7 +79,7 @@ class Circle
       @health -= 5
     end
 
-    @health += @plant / 12.0 / 30.0
+    @health += @plant_value / 12.0 / 30.0
     @age += 1
   end
 
@@ -107,14 +107,17 @@ class Circle
   end
 
   def collide_with other
-    attack_circle other
+    attack other
     bounce_off_of other
   end
 
-  def attack_circle other
-    amount = [rand(attack) - rand(other.defense), 0.1].max / 5.0
-    @health += amount
-    other.health -= amount * 1.1
+  def attack other
+    amount = [rand(attack_value) - rand(other.defense_value), 0.0].max / 5.0
+    return if amount == 0
+    
+    @health += amount * 0.9
+    other.health -= amount
+    puts amount
   end
 
   def bounce_off_of other
