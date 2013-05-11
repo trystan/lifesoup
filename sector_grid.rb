@@ -31,10 +31,10 @@ class SectorGrid
   end
 
   def sector_x circle
-    return circle.position[0] / SECTOR_SIZE + 1
+    return [[circle.position[0] / SECTOR_SIZE + 1, 0].max, @sectors.length - 1].min
   end
 
   def sector_y circle
-    return circle.position[1] / SECTOR_SIZE + 1
+    return [[circle.position[1] / SECTOR_SIZE + 1, 0].max, @sectors[0].length - 1].min
   end
 end
