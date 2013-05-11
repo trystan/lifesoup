@@ -5,30 +5,30 @@ require_relative 'circle.rb'
 
 WIDTH = 600
 HEIGHT = 600
-COLORS = { :red => [255, 64, 64],
-           :yellow => [255, 255, 64],
-           :green => [64, 255, 64],
-           :blue => [64, 64, 255] }
+COLORS = { :red => [255, 96, 96],
+           :yellow => [255, 255, 96],
+           :green => [96, 255, 96],
+           :blue => [96, 96, 255] }
 
 class Game
   def initialize
     @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
-    @clock.target_framerate = 30
+    @clock.target_framerate = 60
     @speed = 1
 
     @world = World.new WIDTH, HEIGHT
-    @world.populate 2
-    @world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
+    #@world.populate 2
+    #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
     @world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
   end
 
   def run
     @running = true
     while @running do
-      events
       @speed.times do
+        events
         @world.update
       end
       draw
@@ -77,10 +77,10 @@ class Game
   end
 
   def draw_hud
-    @screen.title = 'life soup - ' + @world.circles.length.to_s + ' creatures'
+    @screen.title = "life soup - #{@world.circles.length} creatures"
 
     if @speed > 1
-      @screen.title += ' (x' + @speed.to_s + ')'
+      @screen.title += " (x#{@speed.to_s})"
     end
   end
 end
