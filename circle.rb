@@ -1,6 +1,7 @@
 
 class Circle
-  attr_reader :position, :color, :radius, :velocity, :parts
+  attr_reader :position, :color, :radius, :velocity, :parts, :attack, :defense
+  attr_accessor :health
 
   def alive?
     @health > 0
@@ -11,11 +12,11 @@ class Circle
       @position = [parent.position[0] + (rand(11) - 5), parent.position[1] + (rand(11) - 5)]
       @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
       @health = 5.0
-      @parts = parent.parts.copy
+      @parts = parent.parts.clone
     else
       @position = [rand(width / 10) * 10, rand(height / 10) * 10]
       @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
-      @health = 10
+      @health = 8.0
       @parts = []
       24.times do
         @parts << [:red, :yellow, :green, :blue].sample
@@ -23,6 +24,24 @@ class Circle
     end
     @radius = 24
     @max_speed = 1.0
+
+    @attack = 0
+    @defense = 0
+    @plant = 0
+    @birth = 0
+
+    @parts.each do |part|
+      case part
+      when :red
+        @attack += 1
+      when :yellow
+        @defense += 1
+      when :green
+        @plant += 1
+      when :blue
+        @birth += 1
+      end
+    end
   end
 
   def update world
@@ -36,8 +55,10 @@ class Circle
 
     if @health > 10.0
       world.add_circle(Circle.new 100, 100, self)
-      @health -= 5.0
+      @health = 1
     end
+
+    @health += [@plant / 24.0 / 30.0, 0.01].min
   end
 
   def bounce direction
@@ -64,12 +85,14 @@ class Circle
   end
 
   def collide_with other
-    # attack other
+    attack_circle other
     bounce_off_of other
   end
 
-  def attack other
-    @health -= 5
+  def attack_circle other
+    amount = [attack - other.defense, 0.0].max / 5.0
+    @health += amount
+    other.health -= amount * 1.1
   end
 
   def bounce_off_of other
