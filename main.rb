@@ -13,7 +13,7 @@ class Game
 
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
-    @clock.target_framerate = 30
+    @clock.target_framerate = 300
 
     @world = World.new WIDTH, HEIGHT
   end
@@ -21,7 +21,9 @@ class Game
   def run!
     @running = true
     while @running do
-      @world.update
+      10.times do
+        @world.update
+      end
       draw
       events
       @clock.tick

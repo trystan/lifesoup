@@ -22,8 +22,13 @@ class World
     @sectors.resector circle
   end
 
+  def remove_circle circle
+    @circles.delete circle
+    @sectors.unsector circle
+  end
+
   def update
-    if @foods.length < 20
+    if @foods.length < 10
       @foods << [rand(@width), rand(@height)]
     end
     @circles.each do |circle|
@@ -33,7 +38,11 @@ class World
       collide circle
       @sectors.resector circle
     end
-    @circles = @circles.select { |c| c.alive? }
+
+    dead = @circles.select { |c| !c.alive? }
+    dead.each do |circle|
+      remove_circle circle
+    end
   end
 
   def bounds circle

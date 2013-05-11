@@ -1,6 +1,6 @@
 
 class Circle
-  attr_reader :position, :color, :radius, :velocity, :rps
+  attr_reader :position, :color, :radius, :velocity, :parts
 
   def alive?
     @health > 0
@@ -10,25 +10,19 @@ class Circle
     if parent
       @position = [parent.position[0] + (rand(11) - 5), parent.position[1] + (rand(11) - 5)]
       @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
-      @rps = parent.rps
-      @health = 5
+      @health = 5.0
+      @parts = parent.parts.copy
     else
       @position = [rand(width / 10) * 10, rand(height / 10) * 10]
       @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
-      @rps = [:rock, :paper, :scisors].sample
       @health = 10
+      @parts = []
+      24.times do
+        @parts << [:red, :yellow, :green, :blue].sample
+      end
     end
     @radius = 4
     @max_speed = 1.0
-
-    case @rps
-    when :rock
-      @color = [128, 64, 64]
-    when :paper
-      @color = [64, 128, 64]
-    when :scisors
-      @color = [64, 64, 128]
-    end
   end
 
   def update world
@@ -40,9 +34,9 @@ class Circle
     @position[0] += @velocity[0]
     @position[1] += @velocity[1]
 
-    if @health > 10
+    if @health > 10.0
       world.add_circle(Circle.new 100, 100, self)
-      @health -= 3
+      @health -= 5.0
     end
   end
 
@@ -77,21 +71,13 @@ class Circle
     dx * dx + dy * dy <= r2 * r2
   end
 
-  def eat food
-    @health += 1
-  end
-
   def collide_with other
     attack other
     bounce_off_of other
   end
 
   def attack other
-    @health -= 1 if other.beats? @rps
-  end
-
-  def beats? other_rps
-    @rps == :rock && other_rps == :scisors || @rps == :scisors && other_rps == :paper || @rps == :paper && other_rps == :rock
+    @health -= 1
   end
 
   def bounce_off_of other
