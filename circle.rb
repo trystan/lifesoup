@@ -21,7 +21,7 @@ class Circle
         @parts << [:red, :yellow, :green, :blue].sample
       end
     end
-    @radius = 4
+    @radius = 24
     @max_speed = 1.0
   end
 
@@ -53,31 +53,23 @@ class Circle
     end
   end
 
-  def intersects_food? food
-    dx = position[0]-food[0]
-    dy = position[1]-food[1]
-    r2 = radius + 2
-
-    dx * dx + dy * dy <= r2 * r2
-  end
-
   def intersects? other
     return false if other == self
 
-    dx = position[0]-other.position[0]
-    dy = position[1]-other.position[1]
+    dx = position[0] - other.position[0]
+    dy = position[1] - other.position[1]
     r2 = radius + other.radius
 
     dx * dx + dy * dy <= r2 * r2
   end
 
   def collide_with other
-    attack other
+    # attack other
     bounce_off_of other
   end
 
   def attack other
-    @health -= 1
+    @health -= 5
   end
 
   def bounce_off_of other
@@ -86,7 +78,7 @@ class Circle
 
     angle = Math::atan2(@position[1] - other.position[1], @position[0] - other.position[0])
 
-    @velocity[0] = (@velocity[0] + speed * Math::cos(angle) * 2) / 3
-    @velocity[1] = (@velocity[1] + speed * Math::sin(angle) * 2) / 3
+    @velocity[0] = speed * Math::cos(angle)
+    @velocity[1] = speed * Math::sin(angle)
   end
 end

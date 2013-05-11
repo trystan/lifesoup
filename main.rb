@@ -21,9 +21,7 @@ class Game
   def run!
     @running = true
     while @running do
-      10.times do
-        @world.update
-      end
+      @world.update
       draw
       events
       @clock.tick
@@ -41,12 +39,27 @@ class Game
   end
 
   def draw
+    color = { :red => [255, 64, 64],
+              :yellow => [255, 255, 64],
+              :green => [64, 255, 64],
+              :blue => [64, 64, 255] }
+
     @screen.fill [0, 0, 16]
-    @world.foods.each do |food|
-      @screen.draw_circle_a food, 2, [32, 200, 32]
-    end
     @world.circles.each do |circle|
-      @screen.draw_circle_a circle.position, circle.radius, circle.color
+      #@screen.draw_circle_a circle.position, circle.radius, [128, 128, 128]
+
+      x = circle.position[0]
+      y = circle.position[1]
+      r = circle.radius
+      angle = 0
+      diff = (360 / circle.parts.length) * Math::PI / 180
+
+      circle.parts.each do |part|
+        from = [x + r * Math::cos(angle), y + r * Math::sin(angle)]
+        to = [x + r * Math::cos(angle + diff), y + r * Math::sin(angle + diff)]
+        angle += diff
+        @screen.draw_line from, to, color[part]
+      end
     end
     @screen.flip
   end

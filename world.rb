@@ -2,17 +2,15 @@
 require_relative 'sector_grid.rb'
 
 class World
-  attr_reader :circles, :foods
+  attr_reader :circles
 
   def initialize width, height
     @width = width
     @height = height
     @sectors = SectorGrid.new width, height
 
-    @foods = []
-
     @circles = []
-    500.times do
+    10.times do
       add_circle Circle.new(@width, @height)
     end
   end
@@ -28,9 +26,6 @@ class World
   end
 
   def update
-    if @foods.length < 10
-      @foods << [rand(@width), rand(@height)]
-    end
     @circles.each do |circle|
       @sectors.unsector circle
       circle.update self
@@ -60,12 +55,6 @@ class World
   end
 
   def collide circle
-    @foods.each do |food|
-      if circle.intersects_food? food
-        circle.eat food
-        @foods.delete food
-      end
-    end
     @sectors.nearby(circle).each do |other|
       circle.collide_with other if circle.intersects?(other)
     end

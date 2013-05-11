@@ -1,5 +1,5 @@
 
-SECTOR_SIZE = 10
+SECTOR_SIZE = 50
 
 class SectorGrid
   def initialize width, height
