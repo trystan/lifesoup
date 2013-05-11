@@ -74,7 +74,7 @@ class Game
       @screen.draw_line from, to, COLORS[part]
     end
   end
-  
+
   def draw_hud
     @screen.title = 'life soup - ' + @world.circles.length.to_s + ' creatures'
 

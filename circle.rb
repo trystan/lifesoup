@@ -10,26 +10,34 @@ class Circle
   end
 
   def initialize width, height, parent = nil
-    if parent
-      @position = [parent.position[0] + (rand(31) - 15), parent.position[1] + (rand(31) - 15)]
-      @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
-      @health = 4.0
-      @parts = parent.parts.clone
-      mutate
-    else
-      @position = [rand(width / 10) * 10, rand(height / 10) * 10]
-      @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
-      @health = 8.0
-      @parts = []
-      12.times do
-        @parts << [:red, :yellow, :green, :blue].sample
-      end
-    end
     @radius = 6
     @max_speed = 3.0
     @age = 1
+    @health = 4.0
+
+    if parent
+      inherit_genes parent
+      mutate
+    else
+      random_genes width, height
+    end
 
     calculate_attributes
+  end
+
+  def inherit_genes parent
+    @position = [parent.position[0] + (rand(31) - 15), parent.position[1] + (rand(31) - 15)]
+    @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
+    @parts = parent.parts.clone
+  end
+
+  def random_genes width, height
+    @position = [rand(width / 10) * 10, rand(height / 10) * 10]
+    @velocity = [(rand(3.0) - 1.0) * @max_speed, (rand(3.0) - 1.0) * @max_speed]
+    @parts = []
+    12.times do
+      @parts << [:red, :yellow, :green, :blue].sample
+    end
   end
 
   def parts= value
