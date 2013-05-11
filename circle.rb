@@ -29,13 +29,13 @@ class Circle
   end
 
   def inherit_genes parent
-    @position = [parent.position[0] + (rand(31) - 15), parent.position[1] + (rand(31) - 15)]
+    @position = [parent.position[0] + (rand(21) - 10), parent.position[1] + (rand(21) - 10)]
     @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
     @parts = parent.parts.clone
   end
 
   def random_genes width, height
-    @position = [rand(width / 10) * 10, rand(height / 10) * 10]
+    @position = [rand(width), rand(height)]
     @velocity = [(rand(3.0) - 1.0) * @max_speed, (rand(3.0) - 1.0) * @max_speed]
     @parts = []
     12.times do
@@ -96,12 +96,12 @@ class Circle
   def collide_with other
     attack other
     bounce_off_of other
+    other.attack self
+    other.bounce_off_of self
   end
-  
-  def attack other
-    amount = [rand(attack_value) - rand(other.defense_value), 0.0].max / 5.0
-    return if amount == 0
 
+  def attack other
+    amount = [rand(attack_value) - rand(other.defense_value), 0.1].max / 5.0
     @health += amount * 0.9
     other.health -= amount
   end
