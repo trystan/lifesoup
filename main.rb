@@ -16,15 +16,23 @@ class Game
     @clock.target_framerate = 300
 
     @world = World.new WIDTH, HEIGHT
+    @speed = 1
   end
 
   def run!
     @running = true
     while @running do
-      @world.update
+      @speed.times do
+        @world.update
+      end
       draw
       events
       @clock.tick
+      @screen.title = 'life soup - ' + @world.circles.length.to_s + ' creatures'
+
+      if @speed > 1
+        @screen.title += ' (x' + @speed.to_s + ')'
+      end
     end
   end
 
@@ -34,6 +42,12 @@ class Game
         when Rubygame::QuitEvent
           Rubygame.quit
           @running = false
+        when Rubygame::KeyDownEvent
+          if event.key == 61
+            @speed += 1
+          elsif event.key == 45
+            @speed = [@speed - 1, 1].max
+          end
       end
     end
   end

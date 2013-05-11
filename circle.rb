@@ -20,6 +20,7 @@ class Circle
       @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
       @health = 5.0
       @parts = parent.parts.clone
+      mutate
     else
       @position = [rand(width / 10) * 10, rand(height / 10) * 10]
       @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
@@ -29,7 +30,7 @@ class Circle
         @parts << [:red, :yellow, :green, :blue].sample
       end
     end
-    @radius = 8
+    @radius = 6
     @max_speed = 1.0
     @age = 1
 
@@ -38,6 +39,10 @@ class Circle
 
   def radius
     [@radius, @age / 5].min
+  end
+
+  def mutate
+    @parts[rand(@parts.length)] = [:red, :yellow, :green, :blue].sample
   end
 
   def calculate_attributes
