@@ -1,19 +1,17 @@
 
-SECTOR_SIZE = 50
+SECTOR_SIZE = 12
 
 class SectorGrid
   def initialize width, height
-    @sectors = Array.new(width / SECTOR_SIZE) { Array.new(height / SECTOR_SIZE) { [] } }
+    @sectors = Array.new(width / SECTOR_SIZE + 2) { Array.new(height / SECTOR_SIZE + 2) { [] } }
   end
 
   def nearby circle
     near = []
-    x = circle.position[0] / SECTOR_SIZE
-    y = circle.position[1] / SECTOR_SIZE
     offsets.each do |offset|
-      col = @sectors[x + offset[0]]
+      col = @sectors[sectorx(circle) + offset[0]]
       next if !col
-      sector = col[y + offset[1]]
+      sector = col[sectory(circle) + offset[1]]
       next if !sector
       near += sector
     end
@@ -25,10 +23,18 @@ class SectorGrid
   end
 
   def unsector circle
-      @sectors[circle.position[0]/SECTOR_SIZE][circle.position[1]/SECTOR_SIZE].delete circle
+      @sectors[sectorx(circle)][sectory(circle)].delete circle
   end
 
   def resector circle
-      @sectors[circle.position[0]/SECTOR_SIZE][circle.position[1]/SECTOR_SIZE] << circle
+      @sectors[sectorx(circle)][sectory(circle)] << circle
+  end
+
+  def sectorx circle
+    return circle.position[0] / SECTOR_SIZE + 1
+  end
+
+  def sectory circle
+    return circle.position[1] / SECTOR_SIZE + 1
   end
 end
