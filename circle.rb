@@ -1,15 +1,22 @@
 
 class Circle
-  attr_reader :position, :color, :radius, :velocity, :parts, :attack, :defense
-  attr_accessor :health
+  attr_reader :position, :color, :radius, :velocity, :attack, :defense, :age
+  attr_accessor :health, :parts
 
   def alive?
-    @health > 0
+    @health > 0 && @age < 900
+  end
+
+  def self.with_parts width, height, parts
+    c = Circle.new width, height
+    c.parts = parts
+    c.calculate_attributes
+    c
   end
 
   def initialize width, height, parent = nil
     if parent
-      @position = [parent.position[0] + (rand(11) - 5), parent.position[1] + (rand(11) - 5)]
+      @position = [parent.position[0] + (rand(31) - 15), parent.position[1] + (rand(31) - 15)]
       @velocity = [parent.velocity[0] + (rand(3.0) - 1.0) / 10, parent.velocity[1] + (rand(3.0) - 1.0) / 10]
       @health = 5.0
       @parts = parent.parts.clone
@@ -18,13 +25,18 @@ class Circle
       @velocity = [rand(3.0) - 1.0, rand(3.0) - 1.0]
       @health = 8.0
       @parts = []
-      24.times do
+      12.times do
         @parts << [:red, :yellow, :green, :blue].sample
       end
     end
-    @radius = 24
+    @radius = 12
     @max_speed = 1.0
+    @age = 1
 
+    calculate_attributes
+  end
+
+  def calculate_attributes
     @attack = 0
     @defense = 0
     @plant = 0
@@ -55,10 +67,11 @@ class Circle
 
     if @health > 10.0
       world.add_circle(Circle.new 100, 100, self)
-      @health = 1
+      @health -= 5
     end
 
-    @health += [@plant / 24.0 / 30.0, 0.01].min
+    @health += @plant / 12.0 / 30.0
+    @age += 1
   end
 
   def bounce direction
@@ -90,7 +103,7 @@ class Circle
   end
 
   def attack_circle other
-    amount = [attack - other.defense, 0.0].max / 5.0
+    amount = [attack - other.defense, 0.1].max / 5.0
     @health += amount
     other.health -= amount * 1.1
   end

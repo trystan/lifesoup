@@ -13,6 +13,8 @@ class World
     10.times do
       add_circle Circle.new(@width, @height)
     end
+    add_circle Circle.with_parts(@width, @height, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
+    add_circle Circle.with_parts(@width, @height, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
   end
 
   def add_circle circle
