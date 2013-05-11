@@ -33,6 +33,7 @@ class World
       circle.update self
       bounds circle
       collide circle
+
       if circle.alive?
         @sectors.resector circle
       else

@@ -13,7 +13,7 @@ class Circle
   end
 
   def initialize width, height, parent = nil
-    @radius = 6
+    @radius = 12
     @max_speed = 3.0
     @age = 1
     @health = 4.0
@@ -38,7 +38,7 @@ class Circle
     @position = [rand(width), rand(height)]
     @velocity = [(rand(3.0) - 1.0) * @max_speed, (rand(3.0) - 1.0) * @max_speed]
     @parts = []
-    12.times do
+    @radius.times do
       @parts << [:red, :yellow, :green, :blue].sample
     end
   end
@@ -82,7 +82,8 @@ class Circle
     move
     reproduce world
 
-    @health += @plant_value / 12.0 / 30.0
+    @health -= 0.01 / 30.0
+    @health += @plant_value / 30.0 / @radius
     @age += 1
   end
 
@@ -101,7 +102,8 @@ class Circle
   end
 
   def attack other
-    amount = [rand(attack_value) - rand(other.defense_value), 0.1].max / 5.0
+    amount = [(rand(attack_value) - rand(other.defense_value)) * 0.25, 0.1].max
+    amount = [amount, other.health].min
     @health += amount * 0.9
     other.health -= amount
   end

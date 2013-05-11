@@ -19,9 +19,9 @@ class Game
     @speed = 1
 
     @world = World.new WIDTH, HEIGHT
-    #@world.populate 2
+    @world.populate 50
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
-    @world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
+    #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
   end
 
   def run
