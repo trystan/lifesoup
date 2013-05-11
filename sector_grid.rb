@@ -9,9 +9,9 @@ class SectorGrid
   def nearby circle
     near = []
     offsets.each do |offset|
-      col = @sectors[sectorx(circle) + offset[0]]
+      col = @sectors[sector_x(circle) + offset[0]]
       next if !col
-      sector = col[sectory(circle) + offset[1]]
+      sector = col[sector_y(circle) + offset[1]]
       next if !sector
       near += sector
     end
@@ -23,18 +23,18 @@ class SectorGrid
   end
 
   def unsector circle
-      @sectors[sectorx(circle)][sectory(circle)].delete circle
+      @sectors[sector_x(circle)][sector_y(circle)].delete circle
   end
 
   def resector circle
-      @sectors[sectorx(circle)][sectory(circle)] << circle
+      @sectors[sector_x(circle)][sector_y(circle)] << circle
   end
 
-  def sectorx circle
+  def sector_x circle
     return circle.position[0] / SECTOR_SIZE + 1
   end
 
-  def sectory circle
+  def sector_y circle
     return circle.position[1] / SECTOR_SIZE + 1
   end
 end

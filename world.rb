@@ -33,12 +33,11 @@ class World
       circle.update self
       bounds circle
       collide circle
-      @sectors.resector circle
-    end
-
-    dead = @circles.select { |c| !c.alive? }
-    dead.each do |circle|
-      remove_circle circle
+      if circle.alive?
+        @sectors.resector circle
+      else
+        remove_circle circle
+      end
     end
   end
 

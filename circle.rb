@@ -1,16 +1,11 @@
 
 class Circle
-  attr_reader :position, :color, :velocity, :attack_value, :defense_value, :age
-  attr_accessor :health, :parts
-
-  def alive?
-    @health > 0 && @age < 900
-  end
+  attr_reader :position, :color, :velocity, :attack_value, :defense_value, :age, :parts
+  attr_accessor :health
 
   def self.with_parts width, height, parts
     c = Circle.new width, height
     c.parts = parts
-    c.calculate_attributes
     c
   end
 
@@ -31,10 +26,19 @@ class Circle
       end
     end
     @radius = 6
-    @max_speed = 1.0
+    @max_speed = 3.0
     @age = 1
 
     calculate_attributes
+  end
+
+  def parts= value
+    @parts = value
+    calculate_attributes
+  end
+
+  def alive?
+    @health > 0 && @age < 900
   end
 
   def radius
@@ -43,13 +47,13 @@ class Circle
 
   def mutate
     @parts[rand(@parts.length)] = [:red, :yellow, :green, :blue].sample
+    calculate_attributes
   end
 
   def calculate_attributes
     @attack_value = 0
     @defense_value = 0
     @plant_value = 0
-    @birth_value = 0
 
     @parts.each do |part|
       case part
@@ -59,13 +63,19 @@ class Circle
         @defense_value += 1
       when :green
         @plant_value += 1
-      when :blue
-        @birth_value += 1
       end
     end
   end
 
   def update world
+    move
+    reproduce world
+
+    @health += @plant_value / 12.0 / 30.0
+    @age += 1
+  end
+
+  def move
     if rand(10) == 1
       @velocity[0] = [[-@max_speed, @velocity[0] + (rand(3.0) - 1.0) / 5.0].max, @max_speed].min
       @velocity[1] = [[-@max_speed, @velocity[1] + (rand(3.0) - 1.0) / 5.0].max, @max_speed].min
@@ -73,14 +83,13 @@ class Circle
 
     @position[0] += @velocity[0]
     @position[1] += @velocity[1]
+  end
 
-    if @health > 10.0
-      world.add_circle(Circle.new 100, 100, self)
-      @health -= 5
-    end
+  def reproduce world
+    return if @health < 10.0
 
-    @health += @plant_value / 12.0 / 30.0
-    @age += 1
+    world.add_circle(Circle.new 100, 100, self)
+    @health -= 5
   end
 
   def bounce direction
@@ -114,10 +123,9 @@ class Circle
   def attack other
     amount = [rand(attack_value) - rand(other.defense_value), 0.0].max / 5.0
     return if amount == 0
-    
+
     @health += amount * 0.9
     other.health -= amount
-    puts amount
   end
 
   def bounce_off_of other
