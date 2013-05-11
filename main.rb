@@ -34,13 +34,13 @@ class Game
         @screen.title += ' (x' + @speed.to_s + ')'
       end
     end
+    Rubygame.quit
   end
 
   def events
     @queue.each do |event|
       case event
         when Rubygame::QuitEvent
-          Rubygame.quit
           @running = false
         when Rubygame::KeyDownEvent
           if event.key == 61
