@@ -1,5 +1,6 @@
 
 require 'rubygame'
+require_relative 'settings.rb'
 require_relative 'world.rb'
 require_relative 'circle.rb'
 
@@ -15,11 +16,11 @@ class Game
     @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
-    @clock.target_framerate = 60
+    @clock.target_framerate = TARGET_FPS
     @speed = 1
 
     @world = World.new WIDTH, HEIGHT
-    @world.populate 50
+    @world.populate STARTING_POPULATION
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
   end

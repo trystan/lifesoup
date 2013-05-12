@@ -1,5 +1,5 @@
 
-SECTOR_SIZE = 24
+require_relative 'settings.rb'
 
 class SectorGrid
   def initialize width, height
@@ -7,11 +7,13 @@ class SectorGrid
   end
 
   def nearby circle
+    x = sector_x(circle)
+    y = sector_y(circle)
     near = []
     offsets.each do |offset|
-      col = @sectors[sector_x(circle) + offset[0]]
+      col = @sectors[x + offset[0]]
       next if !col
-      sector = col[sector_y(circle) + offset[1]]
+      sector = col[y + offset[1]]
       next if !sector
       near += sector
     end

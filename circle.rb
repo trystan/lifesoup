@@ -13,10 +13,10 @@ class Circle
   end
 
   def initialize width, height, parent = nil
-    @radius = 12
-    @max_speed = 3.0
+    @radius = DEFAULT_RADIUS
+    @max_speed = DEFAULT_MAX_SPEED
     @age = 1
-    @health = 4.0
+    @health = STARTING_HEALTH
 
     if parent
       inherit_genes parent
@@ -49,7 +49,7 @@ class Circle
   end
 
   def alive?
-    @health > 0 && @age < 900
+    @health > 0 && @age < MAX_AGE
   end
 
   def radius
@@ -82,16 +82,16 @@ class Circle
     move
     reproduce world
 
-    @health -= 0.01 / 30.0
+    @health -= HEALTH_LOSS_PER_SECOND / 30.0
     @health += @plant_value / 30.0 / @radius
     @age += 1
   end
 
   def reproduce world
-    return if @health < 10.0
+    return if @health < HEALTH_REQUIRED_TO_REPRODUCE
 
     world.add_circle(Circle.new 100, 100, self)
-    @health -= 5
+    @health -= HEALTH_LOST_TO_REPRODUCE
   end
 
   def collide_with other
@@ -102,7 +102,7 @@ class Circle
   end
 
   def attack other
-    amount = [(rand(attack_value) - rand(other.defense_value)) * 0.25, 0.1].max
+    amount = [(attack_value - other.defense_value) * ATTACK_EFFECTIVENESS, 0.1].max
     amount = [amount, other.health].min
     @health += amount * 0.9
     other.health -= amount
