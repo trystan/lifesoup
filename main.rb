@@ -19,6 +19,9 @@ class Game
     @clock.target_framerate = TARGET_FPS
     @speed = 1
 
+    Rubygame::TTF.setup
+    @font = Rubygame::TTF.new('/Library/Fonts/Times New Roman.ttf', 14)
+
     @world = World.new WIDTH, HEIGHT
     @world.populate STARTING_POPULATION
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
@@ -83,6 +86,9 @@ class Game
     if @speed > 1
       @screen.title += " (x#{@speed.to_s})"
     end
+
+    text = @font.render 'Test', true, [123, 123, 123]
+    text.blit @screen, [10, 10]
   end
 end
 
