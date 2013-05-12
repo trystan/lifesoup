@@ -38,7 +38,7 @@ class Circle
     @position = [rand(width), rand(height)]
     @velocity = [(rand(3.0) - 1.0) * @max_speed, (rand(3.0) - 1.0) * @max_speed]
     @parts = []
-    @radius.times do
+    (@radius * 2).times do
       @parts << [:red, :yellow, :green, :blue].sample
     end
   end

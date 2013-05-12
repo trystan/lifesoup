@@ -6,10 +6,10 @@ require_relative 'circle.rb'
 
 WIDTH = 600
 HEIGHT = 600
-COLORS = { :red => [255, 96, 96],
-           :yellow => [255, 255, 96],
-           :green => [96, 255, 96],
-           :blue => [96, 96, 255] }
+COLORS = { :red => [200, 96, 96],
+           :yellow => [200, 200, 96],
+           :green => [96, 200, 96],
+           :blue => [96, 96, 200] }
 
 class Game
   def initialize
@@ -20,7 +20,7 @@ class Game
     @speed = 1
 
     Rubygame::TTF.setup
-    @font = Rubygame::TTF.new('/Library/Fonts/Times New Roman.ttf', 14)
+    @font = Rubygame::TTF.new(FONT_FILE, 16)
 
     @world = World.new WIDTH, HEIGHT
     @world.populate STARTING_POPULATION
@@ -37,6 +37,7 @@ class Game
       end
       draw
       draw_hud
+      @screen.flip
       @clock.tick
     end
     Rubygame.quit
@@ -62,7 +63,6 @@ class Game
     @world.circles.each do |circle|
       draw_circle circle
     end
-    @screen.flip
   end
 
   def draw_circle circle
@@ -81,14 +81,28 @@ class Game
   end
 
   def draw_hud
-    @screen.title = "life soup - #{@world.circles.length} creatures"
+    @screen.title = "life soup"
 
     if @speed > 1
-      @screen.title += " (x#{@speed.to_s})"
+      @screen.title += " (x#{@speed})"
     end
 
-    text = @font.render 'Test', true, [123, 123, 123]
-    text.blit @screen, [10, 10]
+    counts = { :red => 0, :yellow => 0, :green => 0, :blue => 0 }
+    @world.circles.each do |circle|
+      circle.parts.each do |part|
+        counts[part] += 1
+      end
+    end
+
+    y = 0
+    size = 17
+    ["Creatures #{@world.circles.length}", 
+     "  Reds    #{counts[:red]}", 
+     "  Yellows #{counts[:yellow]}", 
+     "  Greens  #{counts[:green]}", 
+     "  Blues   #{counts[:blue]}"].each do |text|
+      @font.render(text, false, [250, 250, 250]).blit @screen, [5, y += size]
+    end
   end
 end
 
