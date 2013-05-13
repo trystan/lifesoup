@@ -1,4 +1,3 @@
-
 TARGET_FPS = 30
 STARTING_POPULATION = 50
 
@@ -14,6 +13,6 @@ ATTACK_EFFECTIVENESS = 0.25
 SECTOR_SIZE = DEFAULT_RADIUS * 2
 
 
-fonts = ['/Library/Fonts/Courier New.ttf']
+fonts = ['/Library/Fonts/Courier New.ttf', 'C:\\Windows\\Fonts\\consola.ttf']
 
 FONT_FILE = fonts.select { |path| File.exists?(path) } .first
