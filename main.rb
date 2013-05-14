@@ -13,16 +13,20 @@ COLORS = { :red => [200, 96, 96],
 
 class Game
   def initialize
-    @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
+    @position = [0,0]
+    @surface = Rubygame::Surface.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE]
+    @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE]
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
     @clock.target_framerate = TARGET_FPS
     @speed = 1
 
+    Rubygame::enable_key_repeat 0.5, 0.1
+
     Rubygame::TTF.setup
     @font = Rubygame::TTF.new(FONT_FILE, 16)
 
-    @world = World.new WIDTH, HEIGHT
+    @world = World.new WIDTH*2, HEIGHT*2
     @world.populate STARTING_POPULATION
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
@@ -36,8 +40,11 @@ class Game
         @world.update
       end
       draw
+      
+      @surface.blit @screen, [0,0]
+
       draw_hud
-      @screen.flip
+      @screen.update
       @clock.tick
     end
     Rubygame.quit
@@ -53,21 +60,31 @@ class Game
             @speed += 1
           elsif event.key == 45
             @speed = [@speed - 1, 1].max
+          elsif event.key == 276
+            @position[0] = [0, @position[0] - 10].max
+          elsif event.key == 274
+            @position[1] = [600, @position[1] + 10].min
+          elsif event.key == 275
+            @position[0] = [600, @position[0] + 10].min
+          elsif event.key == 273
+            @position[1] = [0, @position[1] - 10].max
           end
+        else
+          puts event
       end
     end
   end
 
   def draw
-    @screen.fill [0, 0, 16]
+    @surface.fill [0, 0, 16]
     @world.circles.each do |circle|
       draw_circle circle
     end
   end
 
   def draw_circle circle
-    x = circle.position[0]
-    y = circle.position[1]
+    x = circle.position[0] - @position[0]
+    y = circle.position[1] - @position[1]
     r = circle.radius
     angle = 0
     diff = (360 / circle.parts.length) * Math::PI / 180
@@ -76,7 +93,7 @@ class Game
       from = [x + r * Math::cos(angle), y + r * Math::sin(angle)]
       to = [x + r * Math::cos(angle + diff), y + r * Math::sin(angle + diff)]
       angle += diff
-      @screen.draw_line from, to, COLORS[part]
+      @surface.draw_line_a from, to, COLORS[part]
     end
   end
 
