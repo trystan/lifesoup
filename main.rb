@@ -14,7 +14,6 @@ COLORS = { :red => [200, 96, 96],
 class Game
   def initialize
     @position = [0,0]
-    @surface = Rubygame::Surface.new [WIDTH*2, HEIGHT*2], 0, [Rubygame::HWSURFACE]
     @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE]
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
@@ -22,7 +21,7 @@ class Game
     @speed = 1
     @zoom = 1.0
 
-    Rubygame::enable_key_repeat 0.5, 0.1
+    Rubygame::enable_key_repeat 0.5, 0.03
 
     Rubygame::TTF.setup
     @font = Rubygame::TTF.new(FONT_FILE, 16)
@@ -41,9 +40,6 @@ class Game
         @world.update
       end
       draw
-      
-      @surface.zoom(@zoom).blit @screen, [0,0]
-
       draw_hud
       @screen.update
       @clock.tick
@@ -70,7 +66,7 @@ class Game
           elsif event.key == Rubygame::K_UP
             @position[1] = [0, @position[1] - 10.0 / @zoom].max
           elsif event.key == Rubygame::K_Z
-            @zoom = [0.1, @zoom - 0.1].max
+            @zoom = [0.5, @zoom - 0.1].max
           elsif event.key == Rubygame::K_X
             @zoom = [2.0, @zoom + 0.1].min
           end
@@ -79,17 +75,16 @@ class Game
   end
 
   def draw
-    @surface.fill [0, 0, 16]
-    @screen.fill [64, 64, 96]
+    @screen.fill [0, 0, 16]
     @world.circles.each do |circle|
       draw_circle circle
     end
   end
 
   def draw_circle circle
-    x = circle.position[0] - @position[0]
-    y = circle.position[1] - @position[1]
-    r = circle.radius
+    x = (circle.position[0] - @position[0]) * @zoom
+    y = (circle.position[1] - @position[1]) * @zoom
+    r = circle.radius * @zoom
     angle = 0
     diff = (360 / circle.parts.length) * Math::PI / 180
 
@@ -97,7 +92,7 @@ class Game
       from = [x + r * Math::cos(angle), y + r * Math::sin(angle)]
       to = [x + r * Math::cos(angle + diff), y + r * Math::sin(angle + diff)]
       angle += diff
-      @surface.draw_line_a from, to, COLORS[part]
+      @screen.draw_line_a from, to, COLORS[part]
     end
   end
 
