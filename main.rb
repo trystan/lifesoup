@@ -35,8 +35,8 @@ class Game
   def run
     @running = true
     while @running do
+      events
       @speed.times do
-        events
         @world.update
       end
       draw
@@ -59,7 +59,7 @@ class Game
           if event.key == 61
             @speed += 1
           elsif event.key == 45
-            @speed = [@speed - 1, 1].max
+            @speed = [@speed - 1, 0].max
           elsif event.key == 276
             @position[0] = [0, @position[0] - 10].max
           elsif event.key == 274
@@ -100,7 +100,9 @@ class Game
   def draw_hud
     @screen.title = "life soup"
 
-    if @speed > 1
+    if @speed == 0
+      @screen.title += " (paused)"
+    elsif @speed > 1
       @screen.title += " (x#{@speed})"
     end
 
