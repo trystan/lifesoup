@@ -83,7 +83,7 @@ class Circle
     reproduce world
 
     @health -= HEALTH_LOSS_PER_SECOND / 30.0
-    @health += @plant_value / 30.0 / @radius
+    @health += GREEN_EFFECTIVENESS * @plant_value / 30.0 / @radius
     @age += 1
   end
 
@@ -91,7 +91,7 @@ class Circle
     return if @health < HEALTH_REQUIRED_TO_REPRODUCE
 
     world.add_circle(Circle.new 100, 100, self)
-    @health -= HEALTH_LOST_TO_REPRODUCE
+    @health -= STARTING_HEALTH + HEALTH_LOST_TO_REPRODUCE
   end
 
   def collide_with other
@@ -102,7 +102,7 @@ class Circle
   end
 
   def attack other
-    amount = [(attack_value - other.defense_value) * ATTACK_EFFECTIVENESS, 0.1].max
+    amount = [(rand(attack_value * RED_EFFECTIVENESS) - rand(other.defense_value * YELLOW_EFFECTIVENESS)), 0.1].max
     amount = [amount, other.health].min
     @health += amount * 0.9
     other.health -= amount
