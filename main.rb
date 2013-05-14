@@ -14,12 +14,13 @@ COLORS = { :red => [200, 96, 96],
 class Game
   def initialize
     @position = [0,0]
-    @surface = Rubygame::Surface.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE]
+    @surface = Rubygame::Surface.new [WIDTH*2, HEIGHT*2], 0, [Rubygame::HWSURFACE]
     @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE]
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
     @clock.target_framerate = TARGET_FPS
     @speed = 1
+    @zoom = 1.0
 
     Rubygame::enable_key_repeat 0.5, 0.1
 
@@ -41,7 +42,7 @@ class Game
       end
       draw
       
-      @surface.blit @screen, [0,0]
+      @surface.zoom(@zoom).blit @screen, [0,0]
 
       draw_hud
       @screen.update
@@ -56,18 +57,25 @@ class Game
         when Rubygame::QuitEvent
           @running = false
         when Rubygame::KeyDownEvent
-          if event.key == 61
+          if event.key == Rubygame::K_PLUS || event.key == Rubygame::K_EQUALS
             @speed += 1
-          elsif event.key == 45
+          elsif event.key == Rubygame::K_MINUS
             @speed = [@speed - 1, 0].max
-          elsif event.key == 276
+          elsif event.key == Rubygame::K_LEFT
             @position[0] = [0, @position[0] - 10].max
-          elsif event.key == 274
+          elsif event.key == Rubygame::K_DOWN
             @position[1] = [600, @position[1] + 10].min
-          elsif event.key == 275
+          elsif event.key == Rubygame::K_RIGHT
             @position[0] = [600, @position[0] + 10].min
-          elsif event.key == 273
+          elsif event.key == Rubygame::K_UP
             @position[1] = [0, @position[1] - 10].max
+          elsif event.key == Rubygame::K_Z
+            @zoom = [0.1, @zoom - 0.1].max
+          elsif event.key == Rubygame::K_X
+            @zoom = [2.1, @zoom + 0.1].min
+          else
+            puts event.key
+            puts event.mods
           end
         else
           puts event
@@ -77,6 +85,7 @@ class Game
 
   def draw
     @surface.fill [0, 0, 16]
+    @screen.fill [0, 0, 16]
     @world.circles.each do |circle|
       draw_circle circle
     end
