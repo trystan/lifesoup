@@ -14,7 +14,7 @@ COLORS = { :red => [200, 96, 96],
 class Game
   def initialize
     @position = [0,0]
-    @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE]
+    @screen = Rubygame::Screen.new [WIDTH, HEIGHT], 0, [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF]
     @queue = Rubygame::EventQueue.new
     @clock = Rubygame::Clock.new
     @clock.target_framerate = TARGET_FPS
@@ -41,7 +41,7 @@ class Game
       end
       draw
       draw_hud
-      @screen.update
+      @screen.flip
       @clock.tick
     end
     Rubygame.quit
