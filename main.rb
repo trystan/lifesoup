@@ -62,30 +62,25 @@ class Game
           elsif event.key == Rubygame::K_MINUS
             @speed = [@speed - 1, 0].max
           elsif event.key == Rubygame::K_LEFT
-            @position[0] = [0, @position[0] - 10].max
+            @position[0] = [0, @position[0] - 10.0 / @zoom].max
           elsif event.key == Rubygame::K_DOWN
-            @position[1] = [600, @position[1] + 10].min
+            @position[1] = [600, @position[1] + 10.0 / @zoom].min
           elsif event.key == Rubygame::K_RIGHT
-            @position[0] = [600, @position[0] + 10].min
+            @position[0] = [600, @position[0] + 10.0 / @zoom].min
           elsif event.key == Rubygame::K_UP
-            @position[1] = [0, @position[1] - 10].max
+            @position[1] = [0, @position[1] - 10.0 / @zoom].max
           elsif event.key == Rubygame::K_Z
             @zoom = [0.1, @zoom - 0.1].max
           elsif event.key == Rubygame::K_X
-            @zoom = [2.1, @zoom + 0.1].min
-          else
-            puts event.key
-            puts event.mods
+            @zoom = [2.0, @zoom + 0.1].min
           end
-        else
-          puts event
       end
     end
   end
 
   def draw
     @surface.fill [0, 0, 16]
-    @screen.fill [0, 0, 16]
+    @screen.fill [64, 64, 96]
     @world.circles.each do |circle|
       draw_circle circle
     end
