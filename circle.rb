@@ -108,7 +108,7 @@ class Circle
   end
 
   def attack other
-    amount = [(rand(attack_value) - rand(other.defense_value)), 0.1].max
+    amount = [(rand(attack_value) - rand(other.defense_value)), 0.0].max
     amount = [amount, other.health].min
     @health += amount * 0.9
     other.health -= amount

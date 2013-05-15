@@ -25,14 +25,17 @@ module Physical
     end
   end
 
+  def distance_squared_to other
+    dx = position[0] - other.position[0]
+    dy = position[1] - other.position[1]
+    
+    dx * dx + dy * dy
+  end
+
   def intersects? other
     return false if other == self
 
-    dx = position[0] - other.position[0]
-    dy = position[1] - other.position[1]
-    r2 = radius + other.radius
-
-    dx * dx + dy * dy <= r2 * r2
+    distance_squared_to(other) <= @radius * @radius
   end
 
   def bounce_off_of other
