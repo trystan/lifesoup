@@ -9,7 +9,8 @@ HEIGHT = 600
 COLORS = { :red => [200, 96, 96],
            :yellow => [200, 200, 96],
            :green => [96, 200, 96],
-           :blue => [96, 96, 200] }
+           :blue => [96, 96, 200],
+           :purple => [200, 96, 200] }
 
 class Game
   def initialize
@@ -26,10 +27,10 @@ class Game
     Rubygame::TTF.setup
     @font = Rubygame::TTF.new(FONT_FILE, 16)
 
-    @world = World.new WIDTH*2, HEIGHT*2
-    @world.populate STARTING_POPULATION
+    @world = World.new WIDTH, HEIGHT
+    #@world.populate STARTING_POPULATION
     #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
-    #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
+    @world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
   end
 
   def run
@@ -105,7 +106,7 @@ class Game
       @screen.title += " (x#{@speed})"
     end
 
-    counts = { :red => 0, :yellow => 0, :green => 0, :blue => 0 }
+    counts = { :red => 0, :yellow => 0, :green => 0, :blue => 0, :purple => 0 }
     @world.circles.each do |circle|
       circle.parts.each do |part|
         counts[part] += 1
@@ -118,9 +119,14 @@ class Game
      "  Reds    #{counts[:red]}", 
      "  Yellows #{counts[:yellow]}", 
      "  Greens  #{counts[:green]}", 
-     "  Blues   #{counts[:blue]}"].each do |text|
+     "  Blues   #{counts[:blue]}", 
+     "  Purples #{counts[:purple]}"].each do |text|
       @font.render(text, false, [250, 250, 250]).blit @screen, [5, y += size]
     end
+
+
+    @font.render("[-] to slow down, [+] to speed up", false, [250, 250, 250]).blit @screen, [5, 600 - 35]
+    @font.render("[z] to zoom out,  [x] to zoom in, arrows to move", false, [250, 250, 250]).blit @screen, [5, 600 - 20]
   end
 end
 
