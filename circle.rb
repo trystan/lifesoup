@@ -1,10 +1,11 @@
 class Circle
-  attr_reader :attack_value, :defense_value, :age, :parts, :position, :velocity
-  attr_accessor :health
+  attr_reader :attack_value, :defense_value, :age, :position, :velocity
+  attr_accessor :health, :parts
 
   def self.with_parts width, height, parts
     c = Circle.new width, height
     c.parts = parts
+    c.calculate_attributes
     c
   end
 
@@ -39,13 +40,8 @@ class Circle
     end
   end
 
-  def parts= value
-    @parts = value
-    calculate_attributes
-  end
-
   def alive?
-    @health > 0 && @age <  @max_age_value
+    @health > 0 && @age < @max_age_value
   end
 
   def mutate
@@ -69,7 +65,7 @@ class Circle
       when :green
         @plant_value += GREEN_EFFECTIVENESS
       when :blue
-        @child_cost_value -= BLUE_EFFECTIVENESS
+        @child_cost_value += BLUE_EFFECTIVENESS
       when :purple
         @max_age_value += PURPLE_EFFECTIVENESS
       end
@@ -102,8 +98,8 @@ class Circle
   def attack other
     amount = [(rand(attack_value) - rand(other.defense_value)), 0.0].max
     amount = [amount, other.health].min
-    @health += amount * 0.9
-    other.health -= amount
+    @health += amount
+    other.health -= amount + 0.1
   end
 
   def radius
