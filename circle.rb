@@ -1,5 +1,3 @@
-require_relative 'physical.rb'
-
 class Circle
   attr_reader :attack_value, :defense_value, :age, :parts, :position, :velocity
   attr_accessor :health
