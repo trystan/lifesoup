@@ -28,9 +28,8 @@ class Game
     @font = Rubygame::TTF.new(FONT_FILE, 16)
 
     @world = World.new WIDTH, HEIGHT
-    #@world.populate STARTING_POPULATION
-    #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red, :red])
-    @world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
+    @world.populate STARTING_POPULATION
+    #@world.add_circle Circle.with_parts(WIDTH, HEIGHT, [:green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green, :green])
   end
 
   def run
