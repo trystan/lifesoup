@@ -35,7 +35,7 @@ module Physical
   def intersects? other
     return false if other == self
 
-    distance_squared_to(other) <= @radius * @radius
+    distance_squared_to(other) <= (radius + other.radius) * (radius + other.radius)
   end
 
   def bounce_off_of other
